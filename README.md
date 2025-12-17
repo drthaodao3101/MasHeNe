@@ -6,10 +6,13 @@
 Link to download our dataset at [Drive](https://drive.google.com/drive/folders/1-Ow93acZSoD31f98QV6CXmnvKFwdBqeQ?usp=sharing)
 
 ```bibtex
- @article{mashene,
-  title={MasHeNe: A Benchmark for Head and Neck CT Mass Segmentation using Window-Enhanced Mamba with Frequency-Domain Integration},
-  author={Thao Thi Phuong Dao, Tan-Cong Nguyen, Nguyen Chi Thanh, Truong Hoang Viet, Trong-Le Do, Mai-Khiem Tran, Minh-Khoi Pham, Trung-Nghia Le, Minh-Triet Tran, Thanh Dinh Le},
-  Conference={The 14th International Symposium on Information and Communication Technology SoICT 2025},
-  year={2025}
+ @misc{dao2025mashenebenchmarkheadneck,
+      title={MasHeNe: A Benchmark for Head and Neck CT Mass Segmentation using Window-Enhanced Mamba with Frequency-Domain Integration}, 
+      author={Thao Thi Phuong Dao and Tan-Cong Nguyen and Nguyen Chi Thanh and Truong Hoang Viet and Trong-Le Do and Mai-Khiem Tran and Minh-Khoi Pham and Trung-Nghia Le and Minh-Triet Tran and Thanh Dinh Le},
+      year={2025},
+      eprint={2512.01563},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2512.01563}, 
 }
 ```
