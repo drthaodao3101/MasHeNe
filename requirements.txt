@@ -1,0 +1,21 @@
+packaging
+timm==0.4.12
+pytest
+chardet
+yacs
+termcolor
+submitit
+tensorboardX
+triton==2.0.0
+
+# For causal_conv1d and mamba_ssm, install via prebuilt wheel if required
+causal_conv1d==1.0.0
+mamba_ssm==1.0.1
+
+scikit-learn
+matplotlib
+thop
+h5py
+SimpleITK
+scikit-image
+medpy
