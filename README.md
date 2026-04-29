@@ -22,6 +22,9 @@ Link to download our dataset at [Drive](https://drive.google.com/drive/folders/1
   conda activate mashene`
   pip install -r requirements.txt
 
+## Create "pre_trained_weights" folder
+You could download the weights (vmamba_small_e238_ema.pth and vmamba_tiny_e292.pth) used by VM-UNet from [Baidu Drive](https://pan.baidu.com/s/1ci_YvPPEiUT2bIIK5x8Igw?pwd=wnyy) or [Google Drive](https://drive.google.com/drive/folders/1Fr7zM1wq7106d0P7_3oeU5UZqUvk2KaP?usp=sharing) 
+
 ## Train: 
 `python train.py --mode train`
 
@@ -37,7 +40,9 @@ This project is based on Mamba ([paper](https://arxiv.org/abs/2402.02491), [code
 @article{dao2025mashene,
   title={MasHeNe: A Benchmark for Head and Neck CT Mass Segmentation using Window-Enhanced Mamba with Frequency-Domain Integration},
   author={Dao, Thao Thi Phuong and Nguyen, Tan-Cong and Thanh, Nguyen Chi and Viet, Truong Hoang and Do, Trong-Le and Tran, Mai-Khiem and Pham, Minh-Khoi and Le, Trung-Nghia and Tran, Minh-Triet and Le, Thanh Dinh},
-  journal={arXiv preprint arXiv:2512.01563},
+  journal={arXiv preprint arXiv:2512.01563
+        
+        },
   year={2025}
 }
 ```
