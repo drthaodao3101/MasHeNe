@@ -43,6 +43,12 @@ def visualize_mask_0(mask_output, save_path,image_slice):
     mask_image.save(save_path)
 
 def visualize_mask_1(color_palette,mask_output, save_path, image_slice, opacity = 0.3): 
+    # --- Rotate input tensors 90° clockwise ---
+    image_slice = torch.rot90(image_slice, k=-1, dims=(0, 1))
+    mask_output = np.rot90(mask_output, k=-1)
+
+    image_slice = torch.flip(image_slice, dims=[1])   # flip theo chiều ngang (W axis)
+    mask_output = np.fliplr(mask_output)              # numpy flip left-right
 
     img = np.array(
         Image.fromarray(image_slice.detach().cpu().numpy(), mode="L").convert("RGB"),
@@ -558,27 +564,29 @@ class myRandomScale:
             return image, mask
         
 class myNormalize:
-    def __init__(self, data_name, hu_range_w1=(-1000, 1000)):
+    def __init__(self, data_name, hu_range_w1=(-1000, 1000),hu_range_w2=(-1000, 1000),hu_range_w3=(-1000, 1000)):
         self.data_name=data_name
         if data_name == 'MasHeNe_65':
             self.hu_min_w1, self.hu_max_w1 = hu_range_w1
+            self.hu_min_w2, self.hu_max_w2 = hu_range_w2
+            self.hu_min_w3, self.hu_max_w3 = hu_range_w3
 
     def __call__(self, data):
         img, msk = data
         if self.data_name == 'MasHeNe_65':
             #Window 1
             img1 = np.clip(img, self.hu_min_w1, self.hu_max_w1)
-            img_normalized= ((img1 - self.hu_min_w1) / (self.hu_max_w1 - self.hu_min_w1))
+            img1_normalized= ((img1 - self.hu_min_w1) / (self.hu_max_w1 - self.hu_min_w1))
 
             #Window 2
-            #img2 = np.clip(img, self.hu_min_w2, self.hu_max_w2)
-            #img2_normalized= ((img2 - self.hu_min_w2) / (self.hu_max_w2 - self.hu_min_w2))
+            img2 = np.clip(img, self.hu_min_w2, self.hu_max_w2)
+            img2_normalized= ((img2 - self.hu_min_w2) / (self.hu_max_w2 - self.hu_min_w2))
 
             #Window 3
-            #img3 = np.clip(img, self.hu_min_w3, self.hu_max_w3)
-            #img3_normalized= ((img3 - self.hu_min_w3) / (self.hu_max_w3 - self.hu_min_w3))
+            img3 = np.clip(img, self.hu_min_w3, self.hu_max_w3)
+            img3_normalized= ((img3 - self.hu_min_w3) / (self.hu_max_w3 - self.hu_min_w3))
 
-            #img_normalized = np.concatenate([img1_normalized, img2_normalized, img3_normalized], axis=0)
+            img_normalized = np.concatenate([img1_normalized, img2_normalized, img3_normalized], axis=0)
 
         return img_normalized, msk
 

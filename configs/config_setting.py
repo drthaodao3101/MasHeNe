@@ -17,7 +17,7 @@ class setting_config:
     #Model config
     network = 'wemf'                                          
     model_config = {
-        'num_classes': 3,                                       
+        'num_classes': num_classes,                                       
         'input_channels':input_channels, 
         # ----- VM-UNet ----- #
         'depths': [2,2,2,2],
@@ -35,14 +35,14 @@ class setting_config:
     hu_range_w1=(-350, 400)
 
     #Tissue window 
-    #WL_2 = 40
-    #WW_2 = 350
-    #hu_range_w2=(int(WL_2 - WW_2/2), int(WL_2 + WW_2/2))
+    WL_2 = 40
+    WW_2 = 350
+    hu_range_w2=(int(WL_2 - WW_2/2), int(WL_2 + WW_2/2))
 
     #Lung window 
-    #WL_3 = -400
-    #WW_3 = 1600
-    #hu_range_w3=(int(WL_3 - WW_3/2), int(WL_3 + WW_3/2))
+    WL_3 = -400
+    WW_3 = 1600
+    hu_range_w3=(int(WL_3 - WW_3/2), int(WL_3 + WW_3/2))
 
 
     datasets = 'MasHeNe_65' 
@@ -90,7 +90,7 @@ class setting_config:
     threshold = 0.5
 
     train_transformer = transforms.Compose([
-        myNormalize(datasets, hu_range_w1=hu_range_w1),
+        myNormalize(datasets, hu_range_w1=hu_range_w1,hu_range_w2=hu_range_w2,hu_range_w3=hu_range_w3),
         myToTensor(),
         myRandomHorizontalFlip(p=0.5),
         myRandomVerticalFlip(p=0.5),
@@ -100,7 +100,7 @@ class setting_config:
         #myResize(input_size_h, input_size_w)
     ])
     test_transformer = transforms.Compose([
-        myNormalize(datasets, hu_range_w1=hu_range_w1),
+        myNormalize(datasets, hu_range_w1=hu_range_w1, hu_range_w2=hu_range_w2, hu_range_w3=hu_range_w3),
         myToTensor(),
         myResize(input_size_h, input_size_w)
     ])

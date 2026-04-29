@@ -838,43 +838,8 @@ class InvertedDepthWiseConv2d(nn.Module):
             return x + self.conv(x)
         else:
             return self.conv(x)
-class Cross_Attention(nn.Module):
-    def __init__(self, key_channels, value_channels, head_count=8):
-        super().__init__()
-        self.key_channels = key_channels
-        self.head_count = head_count
-        self.value_channels = value_channels
-        self.reprojection = nn.Conv2d(value_channels,value_channels, 1)
-        self.norm = nn.LayerNorm(value_channels)
-
-    # x2 should be higher-level representation than x1
-    def forward(self, x1, x2):    #x1 query, x2 key-value  
-        B,H,W,D = x1.shape  
-        x1=x1.reshape(B,H*W,D)
-        x2=x2.reshape(B,-1,D)
-        # Re-arrange into a (Batch, Embedding dim, Tokens)
-        keys = x2.transpose(1, 2)
-        queries = x1.transpose(1, 2)
-        values = x2.transpose(1, 2)
-        head_key_channels = self.key_channels // self.head_count
-        head_value_channels = self.value_channels // self.head_count
-
-        attended_values = []
-        for i in range(self.head_count):
-            key = F.softmax(keys[:, i * head_key_channels : (i + 1) * head_key_channels, :], dim=2)
-            query = F.softmax(queries[:, i * head_key_channels : (i + 1) * head_key_channels, :], dim=1)
-            value = values[:, i * head_value_channels : (i + 1) * head_value_channels, :]
-            context = key @ value.transpose(1, 2)  # dk*dv
-            attended_value = context.transpose(1, 2) @ query  # n*dv
-            attended_values.append(attended_value)
         
-        aggregated_values = torch.cat(attended_values, dim=1).reshape(B, D, H, W)
-        reprojected_value = self.reprojection(aggregated_values).permute(0, 2, 3, 1)   #B*D*H*W=> B*H*W*D
-        reprojected_value = self.norm(reprojected_value)
-        
-        return reprojected_value
-            
-class MFE_CA(nn.Module):
+class MFE(nn.Module):
     def __init__(self, dim, bias=False, a=16, b=16, c_h=16, c_w=16):
         super().__init__()
         
@@ -909,7 +874,6 @@ class MFE_CA(nn.Module):
             InvertedDepthWiseConv2d(2 * dim // 4, 2 * dim // 4),
             InvertedDepthWiseConv2d(2 * dim // 4, dim // 4),
         )
-        self.ca=Cross_Attention(dim,dim)
         
     def forward(self, x):
         #x=x.permute(0, 3, 1, 2)             #b h w c => b c h w 
@@ -952,10 +916,10 @@ class MFE_CA(nn.Module):
         #----- concat -----#
         out = torch.cat([x1, x2, x3, x4], dim=1)
 
-        out = out + x
+        #out = out + x
 
         #out = out.permute(0, 2, 3, 1)             # b c h w => b h w c       
-        self.ca(x.permute(0, 2, 3, 1),out.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+
         return out
 
 
@@ -988,7 +952,7 @@ class MFEB(nn.Module):
         self.layers = nn.ModuleList([])
         for _ in range(depth):
             self.layers.append(nn.ModuleList([
-                PreNorm(dim, MFE_CA(dim)),
+                PreNorm(dim, MFE(dim)),
                 PreNorm(dim, MLP(dim, mlp_ratio))
             ]))
     def forward(self, x):
