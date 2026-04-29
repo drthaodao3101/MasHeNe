@@ -33,7 +33,7 @@ You could download the weights (vmamba_small_e238_ema.pth and vmamba_tiny_e292.p
 
 
 ## Acknowledgement :heart:
-This project is based on Mamba ([paper](https://arxiv.org/abs/2402.02491), [code](https://github.com/JCruan519/VM-UNet)). Thanks for their wonderful work.
+This project is based on Mamba, VM-UNet ([paper](https://arxiv.org/abs/2402.02491), [code](https://github.com/JCruan519/VM-UNet)). Thanks for their wonderful work.
 
 
 ```bibtex
